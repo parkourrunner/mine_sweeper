@@ -1,33 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import './App.scss'
+import Tile from './components/Tile/Tile'
+import {TILE_STATUSES} from "./utils/utils"
 function App() {
-  const [count, setCount] = useState(0)
-
+  const gameState = {
+    numCols: 0,
+    numrow: 0,
+    numMines: 99,
+    gridState: [],
+    time: 0,
+  }
+  function handleTileClick(tileId: string) {
+    console.log(tileId)
+  }
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      
+
+      <div className="tiles-wrapper">
+      <Tile state={{tileId: "1-2", status: TILE_STATUSES.OPEN,approximity : 0, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-3", status: TILE_STATUSES.OPEN,approximity : 1, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 2, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 3, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 4, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 5, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 6, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 7, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-4", status: TILE_STATUSES.OPEN,approximity : 8, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-1", status: TILE_STATUSES.INIT, approximity : 0,hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-5", status: TILE_STATUSES.FLAGGED, approximity : 5, hasMine : false, handleTileClick}}/>
+      <Tile state={{tileId: "1-6", status: TILE_STATUSES.OPEN,approximity : 0, hasMine : true, handleTileClick}}/>
+      <Tile state={{tileId: "1-7", status: TILE_STATUSES.REVEALED, approximity : 0, hasMine : true, handleTileClick}}/>
+
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

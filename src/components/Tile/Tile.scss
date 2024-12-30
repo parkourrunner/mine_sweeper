@@ -1,0 +1,50 @@
+.tile {
+  width: 20px;
+  height: 20px;
+  background-color: #bdbdbd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 0px 1px #000;
+  width: 20px;
+  img {
+    width: 60%;
+    height: 60%;
+  }
+  span {
+    &.blue {
+      color: blue;
+    }
+    &.green {
+      color: green;
+    }
+    &.red {
+      color: red;
+    }
+    &.orange {
+      color: orange;
+    }
+    &.purple {
+      color: purple;
+    }
+    &.aqua {
+      color: aqua;
+    }
+    &.brown {
+      color: brown;
+    }
+    &.cadetblue {
+      color: cadetblue;
+    }
+  }
+  &.init {
+    box-shadow: inset 2px 2px 2px 1px #ffffff, inset -2px -2px 2px 1px #7b7b7b,
+      0px 0px 0px 1px #000;
+  }
+  &.open {
+    color: red;
+  }
+  &.exploded {
+    background-color: red;
+  }
+}
