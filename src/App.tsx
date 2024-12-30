@@ -9,6 +9,7 @@ function App() {
     gridState: [],
     time: 0,
   }
+  console.log(gameState)
   function handleTileClick(tileId: string) {
     console.log(tileId)
   }
