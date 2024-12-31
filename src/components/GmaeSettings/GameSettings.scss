@@ -1,0 +1,19 @@
+
+.game-settings {
+  .error{
+    color: red;
+    font-weight: bold;
+  }
+  .options-wrapper {
+    .option {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+
+      input {
+        width: 50px;
+      }
+    }
+  }
+}

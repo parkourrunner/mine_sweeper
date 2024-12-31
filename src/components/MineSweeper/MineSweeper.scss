@@ -1,0 +1,10 @@
+.mine-sweeper {
+  display: flex;
+  flex-direction: column;
+  background-color: #7b7b7b;
+  padding: 4px;
+  width: fit-content;
+  .row {
+    display: flex;
+  }
+}
