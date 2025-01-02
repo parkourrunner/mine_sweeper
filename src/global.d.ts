@@ -1,13 +1,14 @@
-type TilesState = {
+type TileState = {
   tileId: string;
-  status: typeof TILE_STATUSES;
-  approximity: number;
   hasMine: boolean;
+  approximity: number;
+  adjustentTiles: TileState[];
+  status: typeof TILE_STATUSES;
 };
 type GameState = {
+  time: number;
   numCols: number;
   numRows: number;
   numMines: number;
-  tilesState: TilesState[][];
-  time: number;
+  tilesState: TileState[][];
 };

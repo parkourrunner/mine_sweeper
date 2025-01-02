@@ -5,8 +5,8 @@ function GameSettings({
 }: {
   handleStartGame: ({ numCols, numRows, numMines }: Partial<GameState>) => void;
 }) {
-  const [numCols, setNumCols] = useState(3);
-  const [numRows, setNumRows] = useState(3);
+  const [numCols, setNumCols] = useState(6);
+  const [numRows, setNumRows] = useState(6);
   const [numMines, setNumMines] = useState(2);
   const [error, setError] = useState("");
 

@@ -1,35 +1,117 @@
 import "./MineSweeper.scss";
 import Tile from "../Tile/Tile";
-import { TILE_STATUSES } from "../../utils/utils";
+import { Game_STATUSES, TILE_STATUSES } from "../../utils/utils";
+import { useEffect, useState } from "react";
 function MineSweeper({
   gameState,
   gameStatus,
 }: {
   gameState: GameState;
-  gameStatus: string;
+  gameStatus: Game_STATUSES;
 }) {
-  if (!gameState) {
-    return "No game State";
-  }
+  const [currentGameState, setCurrentGameState] = useState(gameState);
+  const [currentGameStatus, setCurrentGameStatus] = useState(gameStatus);
+  const [flaggedTiles, setFlagedtiles] = useState<string[]>([]);
+  const [timer, setTimer] = useState(gameState.time | 0);
+  const tilesWithMine = gameState.tilesState
+    .flat()
+    .filter((t) => t.hasMine === true)
+    .map((t) => t.tileId);
+
+  useEffect(() => {
+    let interval = undefined;
+    if (currentGameStatus === Game_STATUSES.RUNNING) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    } else if (interval) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [currentGameStatus]);
+
   function handleTileClick(tileId: string) {
-    console.log(tileId);
+    if (currentGameStatus !== Game_STATUSES.RUNNING) {
+      return;
+    }
+    const tile = currentGameState.tilesState
+      .flat()
+      .find((t) => t.tileId === tileId)!;
+    if (tilesWithMine.includes(tile.tileId)) {
+      if (tile.status === TILE_STATUSES.FLAGGED) {
+        setFlagedtiles((prev) => prev.filter((t) => t !== tile.tileId));
+      }
+      tile.status = TILE_STATUSES.OPEN;
+      setCurrentGameStatus(Game_STATUSES.LOST);
+    } else {
+      openTile(tile);
+    }
   }
-  console.log(gameState);
-  console.log(gameStatus);
+
+  function openTile(tile: TileState) {
+    if (tile.status === TILE_STATUSES.FLAGGED) {
+      setFlagedtiles((prev) => prev.filter((flaggedTileId) => flaggedTileId !== tile.tileId));
+    }
+    tile.status = TILE_STATUSES.OPEN;
+    if (tile.approximity === 0) {
+      tile.adjustentTiles.forEach((adj) => {
+        if (adj.status !== TILE_STATUSES.OPEN) openTile(adj);
+      });
+    }
+    setCurrentGameState({ ...currentGameState });
+  }
+
+  function handleRightClick(tileId: string) {
+    if (currentGameStatus !== Game_STATUSES.RUNNING) {
+      return;
+    }
+    const tile = currentGameState.tilesState
+      .flat()
+      .find((t) => t.tileId === tileId)!;
+    if (tile.status === TILE_STATUSES.FLAGGED) {
+      tile.status = TILE_STATUSES.INIT;
+      setFlagedtiles((prev) => prev.filter((flaggedTileId) => flaggedTileId !== tileId));
+    } else {
+      tile.status = TILE_STATUSES.FLAGGED;
+      setFlagedtiles((prev) => [...prev, tile.tileId]);
+    }
+    setCurrentGameState({ ...currentGameState });
+  }
+
+  useEffect(() => {
+    if (flaggedTiles.length === tilesWithMine.length) {
+      const allFlagged = flaggedTiles.every((flaggedTileId) => tilesWithMine.includes(flaggedTileId));
+      if (allFlagged) {
+        const hasNotOpenedTile = currentGameState.tilesState
+          .flat()
+          .some((tile) => tile.status === TILE_STATUSES.INIT);
+        if (!hasNotOpenedTile) {
+          setCurrentGameStatus(Game_STATUSES.WON);
+        }
+      }
+    }
+  }, [flaggedTiles, tilesWithMine, currentGameState]);
+
   return (
     <>
       <div className="mine-sweeper">
-        {gameState.tilesState.map((row, index) => (
+        <span>{timer}</span>
+        <span>{currentGameStatus}</span>
+        {currentGameState.tilesState.map((row, index) => (
           <div className="row" key={"row-" + index + 1}>
             {row.map((tile) => (
-              <Tile key={tile.tileId} state={{ ...tile, handleTileClick }} />
+              <Tile
+                key={tile.tileId}
+                state={{ ...tile, handleTileClick, handleRightClick }}
+              />
             ))}
           </div>
         ))}
       </div>
 
       {/* Remove below later */}
-      <div style={{display:"flex", marginTop:"10px"}}>
+      <div style={{ display: "flex", marginTop: "10px" }}>
         <Tile
           state={{
             tileId: "1-2",
@@ -37,6 +119,7 @@ function MineSweeper({
             approximity: 0,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -46,6 +129,7 @@ function MineSweeper({
             approximity: 1,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -55,6 +139,7 @@ function MineSweeper({
             approximity: 2,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -64,6 +149,7 @@ function MineSweeper({
             approximity: 3,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -73,6 +159,7 @@ function MineSweeper({
             approximity: 4,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -82,6 +169,7 @@ function MineSweeper({
             approximity: 5,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -91,6 +179,7 @@ function MineSweeper({
             approximity: 6,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -100,6 +189,7 @@ function MineSweeper({
             approximity: 7,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -109,6 +199,7 @@ function MineSweeper({
             approximity: 8,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -118,6 +209,7 @@ function MineSweeper({
             approximity: 0,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -127,6 +219,7 @@ function MineSweeper({
             approximity: 5,
             hasMine: false,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -136,6 +229,7 @@ function MineSweeper({
             approximity: 0,
             hasMine: true,
             handleTileClick,
+            handleRightClick,
           }}
         />
         <Tile
@@ -145,6 +239,7 @@ function MineSweeper({
             approximity: 0,
             hasMine: true,
             handleTileClick,
+            handleRightClick,
           }}
         />
       </div>
