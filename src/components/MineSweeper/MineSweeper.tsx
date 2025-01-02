@@ -37,7 +37,7 @@ function MineSweeper({
     return () => clearInterval(interval);
   }, [currentGameStatus]);
 
-  function handleTileClick(tileId: string) {
+  function onTileClick(tileId: string) {
     if (currentGameStatus !== Game_STATUSES.RUNNING) {
       return;
     }
@@ -73,7 +73,7 @@ function MineSweeper({
     setCurrentGameState({ ...currentGameState });
   }
 
-  function handleRightClick(tileId: string) {
+  function onTileRightClick(tileId: string) {
     if (currentGameStatus !== Game_STATUSES.RUNNING) {
       return;
     }
@@ -98,7 +98,8 @@ function MineSweeper({
         tilesWithMine.includes(flaggedTileId)
       );
       if (allFlagged) {
-        const hasNotOpenedTile = openedTilesCount === tilesCount - tilesWithMine.length
+        const hasNotOpenedTile =
+          openedTilesCount === tilesCount - tilesWithMine.length;
         if (hasNotOpenedTile) {
           setCurrentGameStatus(Game_STATUSES.WON);
         }
@@ -116,7 +117,9 @@ function MineSweeper({
             {row.map((tile) => (
               <Tile
                 key={tile.tileId}
-                state={{ ...tile, handleTileClick, handleRightClick }}
+                tile={tile}
+                onTileClick={onTileClick}
+                onTileRightClick={onTileRightClick}
               />
             ))}
           </div>
@@ -126,134 +129,147 @@ function MineSweeper({
       {/* Remove below later */}
       <div style={{ display: "flex", marginTop: "10px" }}>
         <Tile
-          state={{
+          tile={{
             tileId: "1-2",
             status: TILE_STATUSES.OPEN,
             approximity: 0,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-3",
             status: TILE_STATUSES.OPEN,
             approximity: 1,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 2,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 3,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 4,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 5,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 6,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 7,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-4",
             status: TILE_STATUSES.OPEN,
             approximity: 8,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-1",
             status: TILE_STATUSES.INIT,
             approximity: 0,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-5",
             status: TILE_STATUSES.FLAGGED,
             approximity: 5,
             hasMine: false,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-6",
             status: TILE_STATUSES.OPEN,
             approximity: 0,
             hasMine: true,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
         <Tile
-          state={{
+          tile={{
             tileId: "1-7",
             status: TILE_STATUSES.REVEALED,
             approximity: 0,
             hasMine: true,
-            handleTileClick,
-            handleRightClick,
+            adjustentTiles: [],
           }}
+          onTileClick={onTileClick}
+          onTileRightClick={onTileRightClick}
         />
       </div>
     </>

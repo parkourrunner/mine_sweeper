@@ -2,39 +2,52 @@ import "./Tile.scss";
 import LandMineIcon from "../../img/land-mine.png";
 import RedFlagIcon from "../../img/red-flag.png";
 import { TILE_STATUSES } from "../../utils/utils";
-import { MouseEvent } from "react";
+import { MouseEvent, useRef } from "react";
 type TileProps = {
-  state: {
-    tileId: string;
-    status: string;
-    approximity: number;
-    hasMine: boolean;
-    handleTileClick: (tileId: string) => void;
-    handleRightClick: (tileId: string) => void;
-  };
+  tile: TileState;
+  onTileClick: (tileId: string) => void;
+  onTileRightClick: (tileId: string) => void;
 };
 
-function Tile({
-  state: {
-    tileId,
-    status,
-    approximity = 0,
-    hasMine,
-    handleTileClick,
-    handleRightClick,
-  },
-}: TileProps) {
-  function handleContextMenu(e: MouseEvent) {
+function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
+  const { hasMine, approximity } = tile;
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+
+  function handleOnRightClick(e: MouseEvent) {
     e.preventDefault();
-    handleRightClick(tileId);
+    if (!isLongPress.current) {
+      onTileRightClick(tile.tileId);
+    }
   }
-  switch (status) {
+
+  function startPressTimer() {
+    isLongPress.current = false;
+    timerRef.current = setTimeout(() => {
+      isLongPress.current = true;
+    }, 100);
+  }
+  function handleOnTouchStart() {
+    startPressTimer();
+  }
+  
+  function handleOnTouchEnd() {
+    if (isLongPress.current) {
+      onTileRightClick(tile.tileId);
+    } else {
+      onTileClick(tile.tileId);
+    }
+    clearTimeout(timerRef.current);
+  }
+  switch (tile.status) {
     case TILE_STATUSES.INIT: {
       return (
         <div
           className="tile init"
-          onClick={() => handleTileClick(tileId)}
-          onContextMenu={handleContextMenu}
+          onClick={() => onTileClick(tile.tileId)}
+          onTouchStart={handleOnTouchStart}
+          onTouchEnd={handleOnTouchEnd}
+          onContextMenu={handleOnRightClick}
         ></div>
       );
     }
@@ -95,8 +108,10 @@ function Tile({
       return (
         <div
           className="tile init flagged"
-          onClick={() => handleTileClick(tileId)}
-          onContextMenu={handleContextMenu}
+          onClick={() => onTileClick(tile.tileId)}
+          onTouchStart={handleOnTouchStart}
+          onTouchEnd={handleOnTouchEnd}
+          onContextMenu={handleOnRightClick}
         >
           <img src={RedFlagIcon} alt="red flag" />
         </div>
