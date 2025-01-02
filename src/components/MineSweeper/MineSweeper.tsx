@@ -13,10 +13,16 @@ function MineSweeper({
   const [currentGameStatus, setCurrentGameStatus] = useState(gameStatus);
   const [flaggedTiles, setFlagedtiles] = useState<string[]>([]);
   const [timer, setTimer] = useState(gameState.time | 0);
-  const tilesWithMine = gameState.tilesState
-    .flat()
-    .filter((t) => t.hasMine === true)
-    .map((t) => t.tileId);
+  const [tilesWithMine, setTilesWithMine] = useState<string[]>([]);
+  const [openedTilesCount, setOpenedTilesCount] = useState(0);
+  const flatTiles = gameState.tilesState.flat();
+  const tilesCount = flatTiles.length;
+
+  useEffect(() => {
+    setTilesWithMine(
+      flatTiles.filter((t) => t.hasMine === true).map((t) => t.tileId)
+    );
+  }, []);
 
   useEffect(() => {
     let interval = undefined;
@@ -51,12 +57,17 @@ function MineSweeper({
 
   function openTile(tile: TileState) {
     if (tile.status === TILE_STATUSES.FLAGGED) {
-      setFlagedtiles((prev) => prev.filter((flaggedTileId) => flaggedTileId !== tile.tileId));
+      setFlagedtiles((prev) =>
+        prev.filter((flaggedTileId) => flaggedTileId !== tile.tileId)
+      );
     }
     tile.status = TILE_STATUSES.OPEN;
+    setOpenedTilesCount((prev) => prev + 1);
     if (tile.approximity === 0) {
       tile.adjustentTiles.forEach((adj) => {
-        if (adj.status !== TILE_STATUSES.OPEN) openTile(adj);
+        if (adj.status !== TILE_STATUSES.OPEN) {
+          openTile(adj);
+        }
       });
     }
     setCurrentGameState({ ...currentGameState });
@@ -71,7 +82,9 @@ function MineSweeper({
       .find((t) => t.tileId === tileId)!;
     if (tile.status === TILE_STATUSES.FLAGGED) {
       tile.status = TILE_STATUSES.INIT;
-      setFlagedtiles((prev) => prev.filter((flaggedTileId) => flaggedTileId !== tileId));
+      setFlagedtiles((prev) =>
+        prev.filter((flaggedTileId) => flaggedTileId !== tileId)
+      );
     } else {
       tile.status = TILE_STATUSES.FLAGGED;
       setFlagedtiles((prev) => [...prev, tile.tileId]);
@@ -81,17 +94,17 @@ function MineSweeper({
 
   useEffect(() => {
     if (flaggedTiles.length === tilesWithMine.length) {
-      const allFlagged = flaggedTiles.every((flaggedTileId) => tilesWithMine.includes(flaggedTileId));
+      const allFlagged = flaggedTiles.every((flaggedTileId) =>
+        tilesWithMine.includes(flaggedTileId)
+      );
       if (allFlagged) {
-        const hasNotOpenedTile = currentGameState.tilesState
-          .flat()
-          .some((tile) => tile.status === TILE_STATUSES.INIT);
-        if (!hasNotOpenedTile) {
+        const hasNotOpenedTile = openedTilesCount === tilesCount - tilesWithMine.length
+        if (hasNotOpenedTile) {
           setCurrentGameStatus(Game_STATUSES.WON);
         }
       }
     }
-  }, [flaggedTiles, tilesWithMine, currentGameState]);
+  }, [openedTilesCount, flaggedTiles]);
 
   return (
     <>
