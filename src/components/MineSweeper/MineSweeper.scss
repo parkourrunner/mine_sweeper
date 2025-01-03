@@ -1,10 +1,66 @@
 .mine-sweeper {
   display: flex;
   flex-direction: column;
-  background-color: #7b7b7b;
+  background-color: #c0c0c0;
   padding: 4px;
   width: fit-content;
-  .row {
+  font-size: 12px;
+  box-shadow: inset 2px 2px 2px 1px #ffffff, inset -2px -2px 2px 1px #7b7b7b,
+    0px 0px 0px 1px #000;
+  .game-header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+
+    .flag-count {
+      border: 1px solid;
+      border-radius: 4px;
+      background-color: #afafafaf;
+      width: 30px;
+      text-align: center;
+    }
+    .options {
+      display: flex;
+      img {
+        cursor: pointer;
+        width: 10px;
+        padding: 2px;
+        border: 1px solid;
+        border-radius: 4px;
+        background-color: #afafafaf;
+      }
+      button {
+        width: 50px;
+        font-size: 10px;
+        padding: 0;
+      }
+    }
+    .timer {
+      width: 30px;
+      text-align: center;
+      border: 1px solid;
+      border-radius: 4px;
+      background-color: #afafafaf;
+    }
+  }
+  .tiles-wrapper {
+    .row {
+      display: flex;
+    }
+  }
+  .pause-screen {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      cursor: pointer;
+      width: 30px;
+      padding: 2px;
+      border: 1px solid;
+      border-radius: 4px;
+      background-color: #afafafaf;
+    }
   }
 }

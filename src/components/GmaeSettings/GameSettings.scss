@@ -16,4 +16,10 @@
       }
     }
   }
+  button {
+    color: black;
+    &:hover{
+      background-color: #afafaf;
+    }
+  }
 }

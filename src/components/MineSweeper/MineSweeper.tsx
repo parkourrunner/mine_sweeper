@@ -1,23 +1,40 @@
 import "./MineSweeper.scss";
 import Tile from "../Tile/Tile";
 import { Game_STATUSES, TILE_STATUSES } from "../../utils/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import PauseIcon from "../../img/pause.png";
+import PlayIcon from "../../img/play.png";
+import ResetIcon from "../../img/reset.png";
 function MineSweeper({
   gameState,
-  gameStatus,
+  onGameStatuschange,
 }: {
   gameState: GameState;
-  gameStatus: Game_STATUSES;
+  onGameStatuschange: (status: Game_STATUSES) => void;
 }) {
   const [currentGameState, setCurrentGameState] = useState(gameState);
-  const [currentGameStatus, setCurrentGameStatus] = useState(gameStatus);
+  const [currentGameStatus, setCurrentGameStatus] = useState(
+    Game_STATUSES.RUNNING
+  );
   const [flaggedTiles, setFlagedtiles] = useState<string[]>([]);
   const [timer, setTimer] = useState(gameState.time | 0);
   const [tilesWithMine, setTilesWithMine] = useState<string[]>([]);
   const [openedTilesCount, setOpenedTilesCount] = useState(0);
   const flatTiles = gameState.tilesState.flat();
   const tilesCount = flatTiles.length;
+  const gameWrapper = useRef<HTMLDivElement>(null);
 
+  function handleGameStatusChange(status: Game_STATUSES) {
+    setCurrentGameStatus(status);
+    onGameStatuschange(status);
+  }
+
+  useEffect(() => {
+    if (gameWrapper.current) {
+      gameWrapper.current.style.minWidth = 20 * gameState.numCols + "px";
+      gameWrapper.current.style.height = 20 * gameState.numRows + 50 + "px";
+    }
+  }, [gameState, gameWrapper]);
   useEffect(() => {
     setTilesWithMine(
       flatTiles.filter((t) => t.hasMine === true).map((t) => t.tileId)
@@ -50,6 +67,8 @@ function MineSweeper({
       }
       tile.status = TILE_STATUSES.OPEN;
       setCurrentGameStatus(Game_STATUSES.LOST);
+      onGameStatuschange(Game_STATUSES.LOST);
+      gameWrapper.current!.style.backgroundColor = "#ff0000";
     } else {
       openTile(tile);
     }
@@ -102,6 +121,8 @@ function MineSweeper({
           openedTilesCount === tilesCount - tilesWithMine.length;
         if (hasNotOpenedTile) {
           setCurrentGameStatus(Game_STATUSES.WON);
+          onGameStatuschange(Game_STATUSES.WON);
+          gameWrapper.current!.style.backgroundColor = "#00b500";
         }
       }
     }
@@ -109,25 +130,55 @@ function MineSweeper({
 
   return (
     <>
-      <div className="mine-sweeper">
-        <span>{timer}</span>
-        <span>{currentGameStatus}</span>
-        {currentGameState.tilesState.map((row, index) => (
-          <div className="row" key={"row-" + index + 1}>
-            {row.map((tile) => (
-              <Tile
-                key={tile.tileId}
-                tile={tile}
-                onTileClick={onTileClick}
-                onTileRightClick={onTileRightClick}
+      <div ref={gameWrapper} className="mine-sweeper">
+        <div className="game-header">
+          <div className="flag-count">{flaggedTiles.length}</div>
+          <div className="options">
+            {[Game_STATUSES.LOST, Game_STATUSES.WON].includes(
+              currentGameStatus
+            ) ? (
+              <img
+                src={ResetIcon}
+                onClick={() => handleGameStatusChange(Game_STATUSES.INIT)}
               />
+            ) : null}
+
+            {currentGameStatus === Game_STATUSES.RUNNING ? (
+              <img
+                src={PauseIcon}
+                onClick={() => handleGameStatusChange(Game_STATUSES.PAUSED)}
+              />
+            ) : null}
+          </div>
+          <div className="timer">{timer}</div>
+        </div>
+        {currentGameStatus === Game_STATUSES.PAUSED ? (
+          <div className="pause-screen">
+            <img
+              src={PlayIcon}
+              onClick={() => handleGameStatusChange(Game_STATUSES.RUNNING)}
+            />
+          </div>
+        ) : (
+          <div className="tiles-wrapper">
+            {currentGameState.tilesState.map((row, index) => (
+              <div className="row" key={"row-" + index + 1}>
+                {row.map((tile) => (
+                  <Tile
+                    key={tile.tileId}
+                    tile={tile}
+                    onTileClick={onTileClick}
+                    onTileRightClick={onTileRightClick}
+                  />
+                ))}
+              </div>
             ))}
           </div>
-        ))}
+        )}
       </div>
 
       {/* Remove below later */}
-      <div style={{ display: "flex", marginTop: "10px" }}>
+      {/* <div style={{ display: "flex", marginTop: "10px" }}>
         <Tile
           tile={{
             tileId: "1-2",
@@ -271,7 +322,7 @@ function MineSweeper({
           onTileClick={onTileClick}
           onTileRightClick={onTileRightClick}
         />
-      </div>
+      </div> */}
     </>
   );
 }

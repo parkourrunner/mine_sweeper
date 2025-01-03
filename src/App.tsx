@@ -16,18 +16,19 @@ function App() {
     setGameState(gameStateGenerator({ numCols, numRows, numMines }));
     setGameStatus(Game_STATUSES.RUNNING);
   }
+  function onGameStatuschange(status: Game_STATUSES) {
+    setGameStatus(status);
+  }
   return (
     <>
-      {[
-        Game_STATUSES.INIT,
-        Game_STATUSES.WON,
-        Game_STATUSES.LOST,
-        Game_STATUSES.PAUSED,
-      ].includes(gameStatus) ? (
+      {[Game_STATUSES.INIT].includes(gameStatus) ? (
         <GameSettings handleStartGame={handleStartGame} />
       ) : null}
-      {gameState !== null && gameStatus !== Game_STATUSES.PAUSED ? (
-        <MineSweeper gameState={gameState} gameStatus={gameStatus} />
+      {gameState !== null && gameStatus !== Game_STATUSES.INIT ? (
+        <MineSweeper
+          gameState={gameState}
+          onGameStatuschange={onGameStatuschange}
+        />
       ) : null}
     </>
   );
