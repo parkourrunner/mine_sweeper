@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import PauseIcon from "../../img/pause.png";
 import PlayIcon from "../../img/play.png";
 import ResetIcon from "../../img/reset.png";
+
 function MineSweeper({
   gameState,
   onGameStatuschange,
@@ -35,6 +36,7 @@ function MineSweeper({
       gameWrapper.current.style.height = 20 * gameState.numRows + 50 + "px";
     }
   }, [gameState, gameWrapper]);
+
   useEffect(() => {
     setTilesWithMine(
       flatTiles.filter((t) => t.hasMine === true).map((t) => t.tileId)

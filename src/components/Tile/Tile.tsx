@@ -3,6 +3,8 @@ import LandMineIcon from "../../img/land-mine.png";
 import RedFlagIcon from "../../img/red-flag.png";
 import { TILE_STATUSES } from "../../utils/utils";
 import { MouseEvent, useRef } from "react";
+import { isMobile } from "react-device-detect";
+
 type TileProps = {
   tile: TileState;
   onTileClick: (tileId: string) => void;
@@ -16,7 +18,7 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
 
   function handleOnRightClick(e: MouseEvent) {
     e.preventDefault();
-    if (!isLongPress.current) {
+    if (!isMobile) {
       onTileRightClick(tile.tileId);
     }
   }
@@ -27,10 +29,11 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
       isLongPress.current = true;
     }, 100);
   }
+
   function handleOnTouchStart() {
     startPressTimer();
   }
-  
+
   function handleOnTouchEnd() {
     if (isLongPress.current) {
       onTileRightClick(tile.tileId);
@@ -39,15 +42,22 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
     }
     clearTimeout(timerRef.current);
   }
+
+  function handleOnclick() {
+    if (!isMobile) {
+      onTileClick(tile.tileId);
+    }
+  }
+
   switch (tile.status) {
     case TILE_STATUSES.INIT: {
       return (
         <div
           className="tile init"
-          onClick={() => onTileClick(tile.tileId)}
+          onClick={() => handleOnclick()}
+          onContextMenu={handleOnRightClick}
           onTouchStart={handleOnTouchStart}
           onTouchEnd={handleOnTouchEnd}
-          onContextMenu={handleOnRightClick}
         ></div>
       );
     }
@@ -106,14 +116,15 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
     }
     case TILE_STATUSES.FLAGGED: {
       return (
-        <div
-          className="tile init flagged"
-          onClick={() => onTileClick(tile.tileId)}
-          onTouchStart={handleOnTouchStart}
-          onTouchEnd={handleOnTouchEnd}
-          onContextMenu={handleOnRightClick}
-        >
+        <div className="tile init flagged">
           <img src={RedFlagIcon} alt="red flag" />
+          <div
+            className="overlay"
+            onClick={() => handleOnclick()}
+            onContextMenu={handleOnRightClick}
+            onTouchStart={handleOnTouchStart}
+            onTouchEnd={handleOnTouchEnd}
+          ></div>
         </div>
       );
     }
