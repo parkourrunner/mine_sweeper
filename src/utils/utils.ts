@@ -15,7 +15,7 @@ export enum Game_STATUSES {
 export function gameStateGenerator({
   numCols = 0,
   numRows = 0,
-  numMines = 99,
+  numMines = 0,
 }: Partial<GameState>): GameState {
   const tilesState: TileState[][] = Array(numRows);
   for (let i = 0; i < numRows; i++) {

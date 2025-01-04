@@ -25,7 +25,7 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
 
   function startPressTimer() {
     isLongPress.current = false;
-    timerRef.current = setTimeout(() => {
+    timerRef.current = window.setTimeout(() => {
       isLongPress.current = true;
     }, 100);
   }
