@@ -22,6 +22,6 @@ declare global {
     hasMine: boolean;
     approximity: number;
     adjustentTiles: TileState[];
-    status: typeof TILE_STATUSES;
+    status: string;
   };
 }
