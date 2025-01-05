@@ -9,7 +9,6 @@ describe("utils test suite", () => {
       expect(TILE_STATUSES.INIT).toBe("init");
       expect(TILE_STATUSES.OPEN).toBe("open");
       expect(TILE_STATUSES.FLAGGED).toBe("flagged");
-      expect(TILE_STATUSES.REVEALED).toBe("revealed");
     });
   });
 

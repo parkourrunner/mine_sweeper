@@ -53,6 +53,8 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
     case TILE_STATUSES.INIT: {
       return (
         <div
+          data-testid={tile.tileId}
+          role="tile"
           className="tile init"
           onClick={() => handleOnclick()}
           onContextMenu={handleOnRightClick}
@@ -64,7 +66,7 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
     case TILE_STATUSES.OPEN: {
       if (hasMine) {
         return (
-          <div className="tile exploded">
+          <div className="tile exploded" role="tile" data-testid={tile.tileId}>
             <img className="exploded" src={LandMineIcon} alt="land mine" />
           </div>
         );
@@ -107,8 +109,8 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
           break;
       }
       return (
-        <div className="tile">
-          <span className={colorclass}>
+        <div className="tile" role="tile" data-testid={tile.tileId}>
+          <span className={colorclass} role="approximity">
             {approximity > 0 ? approximity : null}
           </span>
         </div>
@@ -116,22 +118,20 @@ function Tile({ tile, onTileClick, onTileRightClick }: TileProps) {
     }
     case TILE_STATUSES.FLAGGED: {
       return (
-        <div className="tile init flagged">
-          <img src={RedFlagIcon} alt="red flag" />
+        <div
+          className="tile init flagged"
+          role="tile"
+          data-testid={tile.tileId}
+        >
+          <img src={RedFlagIcon} role="red-flag" alt="red flag" />
           <div
             className="overlay"
+            role="overlay"
             onClick={() => handleOnclick()}
             onContextMenu={handleOnRightClick}
             onTouchStart={handleOnTouchStart}
             onTouchEnd={handleOnTouchEnd}
           ></div>
-        </div>
-      );
-    }
-    case TILE_STATUSES.REVEALED: {
-      return (
-        <div className="tile">
-          <img className="exploded" src={LandMineIcon} alt="land mine" />
         </div>
       );
     }

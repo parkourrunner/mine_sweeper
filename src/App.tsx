@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.scss";
 import { Game_STATUSES, gameStateGenerator } from "./utils/utils";
 import MineSweeper from "./components/MineSweeper/MineSweeper";
-import GameSettings from "./components/GmaeSettings/GameSettings";
+import GameSettings from "./components/GameSettings/GameSettings";
 
 function App() {
   const [gameState, setGameState] = useState<GameState | null>(null);

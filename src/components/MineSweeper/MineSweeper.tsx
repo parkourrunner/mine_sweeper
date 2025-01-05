@@ -134,29 +134,36 @@ function MineSweeper({
     <>
       <div ref={gameWrapper} className="mine-sweeper">
         <div className="game-header">
-          <div className="flag-count">{flaggedTiles.length}</div>
+          <div className="flag-count" role="flag-count">
+            {flaggedTiles.length}
+          </div>
           <div className="options">
             {[Game_STATUSES.LOST, Game_STATUSES.WON].includes(
               currentGameStatus
             ) ? (
               <img
                 src={ResetIcon}
+                role="reset-game"
                 onClick={() => handleGameStatusChange(Game_STATUSES.INIT)}
               />
             ) : null}
 
             {currentGameStatus === Game_STATUSES.RUNNING ? (
               <img
+                role="pause-game"
                 src={PauseIcon}
                 onClick={() => handleGameStatusChange(Game_STATUSES.PAUSED)}
               />
             ) : null}
           </div>
-          <div className="timer">{timer}</div>
+          <div className="timer" role="timer">
+            {timer}
+          </div>
         </div>
         {currentGameStatus === Game_STATUSES.PAUSED ? (
           <div className="pause-screen">
             <img
+              role="resume-game"
               src={PlayIcon}
               onClick={() => handleGameStatusChange(Game_STATUSES.RUNNING)}
             />
@@ -178,153 +185,6 @@ function MineSweeper({
           </div>
         )}
       </div>
-
-      {/* Remove below later */}
-      {/* <div style={{ display: "flex", marginTop: "10px" }}>
-        <Tile
-          tile={{
-            tileId: "1-2",
-            status: TILE_STATUSES.OPEN,
-            approximity: 0,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-3",
-            status: TILE_STATUSES.OPEN,
-            approximity: 1,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 2,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 3,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 4,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 5,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 6,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 7,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-4",
-            status: TILE_STATUSES.OPEN,
-            approximity: 8,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-1",
-            status: TILE_STATUSES.INIT,
-            approximity: 0,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-5",
-            status: TILE_STATUSES.FLAGGED,
-            approximity: 5,
-            hasMine: false,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-6",
-            status: TILE_STATUSES.OPEN,
-            approximity: 0,
-            hasMine: true,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-        <Tile
-          tile={{
-            tileId: "1-7",
-            status: TILE_STATUSES.REVEALED,
-            approximity: 0,
-            hasMine: true,
-            adjustentTiles: [],
-          }}
-          onTileClick={onTileClick}
-          onTileRightClick={onTileRightClick}
-        />
-      </div> */}
     </>
   );
 }

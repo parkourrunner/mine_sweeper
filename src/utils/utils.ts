@@ -2,7 +2,6 @@ export enum TILE_STATUSES {
   INIT = "init",
   OPEN = "open",
   FLAGGED = "flagged",
-  REVEALED = "revealed",
 }
 export enum Game_STATUSES {
   INIT = "init",
