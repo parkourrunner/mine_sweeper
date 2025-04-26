@@ -10,6 +10,7 @@
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 8px;
+      color: black;
 
       input {
         width: 50px;
@@ -17,7 +18,6 @@
     }
   }
   button {
-    color: black;
     &:hover{
       background-color: #afafaf;
     }
